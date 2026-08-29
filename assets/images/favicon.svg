@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="8" fill="#0A0A0A"/>
+  <g transform="translate(16,14)">
+    <polygon points="0,-10 8.66,-5 8.66,5 0,10 -8.66,5 -8.66,-5" fill="none" stroke="#FF5C00" stroke-width="1.5"/>
+    <circle cx="0" cy="-10" r="1.5" fill="#FF5C00"/>
+    <circle cx="8.66" cy="-5" r="1.5" fill="#FF5C00"/>
+    <circle cx="8.66" cy="5" r="1.5" fill="#FF5C00"/>
+    <circle cx="0" cy="10" r="1.5" fill="#FF5C00"/>
+    <circle cx="-8.66" cy="5" r="1.5" fill="#FF5C00"/>
+    <circle cx="-8.66" cy="-5" r="1.5" fill="#FF5C00"/>
+    <circle cx="0" cy="0" r="3" fill="#FF5C00"/>
+  </g>
+  <text x="16" y="29" font-family="sans-serif" font-weight="800" font-size="5" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="1.5">IS</text>
+</svg>

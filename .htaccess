@@ -1,0 +1,93 @@
+# ═══════════════════════════════════════════════════
+# Info-Sup Digital — .htaccess v5.1 (Sécurité renforcée)
+# ═══════════════════════════════════════════════════
+
+RewriteEngine On
+# Pas de RewriteBase fixe: permet au site de marcher en racine de domaine
+# et aussi dans un sous-dossier XAMPP comme /en-naji.com/.
+
+# ── HTTPS + WWW Redirect ──────────────────────────
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\.info-sup\.com$ [NC]
+RewriteRule ^(.*)$ https://www.info-sup.com/$1 [L,R=301]
+
+# ── Clean URLs (sans .php) ────────────────────────
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(web|materiel|ia|contact)$ $1.php [L]
+
+# ── Bloquer accès aux fichiers sensibles ──────────
+RewriteRule ^includes/ - [F,L]
+RewriteRule \.(sql|env|log|bak|ini|sh|git|svn)$ - [F,L]
+RewriteRule ^\.git - [F,L]
+RewriteRule ^\.env - [F,L]
+RewriteRule ^composer\.(json|lock)$ - [F,L]
+
+# ── Bloquer les requêtes suspectes (SQL injection) ─
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} (\|\.\.\/|\.\.\\|~|`|<|>|\^|\|) [NC,OR]
+RewriteCond %{QUERY_STRING} (union)(.*)(select) [NC,OR]
+RewriteCond %{QUERY_STRING} (insert|drop|delete|update|alter)(.*)(into|from|set|table) [NC,OR]
+RewriteCond %{QUERY_STRING} (benchmark|sleep|load_file|outfile) [NC,OR]
+RewriteCond %{QUERY_STRING} (\/\*|\*\/|;--|0x[0-9a-f]+) [NC]
+RewriteRule .* - [F,L]
+
+# ── Bloquer les User-Agents malveillants ──────────
+RewriteCond %{HTTP_USER_AGENT} (sqlmap|nikto|havij|acunetix|nessus|w3af|openvas) [NC]
+RewriteRule .* - [F,L]
+
+# ── Sécurité Headers ─────────────────────────────
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'"
+</IfModule>
+
+# ── Protéger les fichiers de config dans admin ────
+<FilesMatch "\.(php|ini|log|sh)$">
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+</FilesMatch>
+
+# ── Bloquer l'exécution PHP dans uploads ──────────
+# NOTE: <Directory> is not allowed inside .htaccess and causes Apache 500.
+# Configure upload execution blocking in Apache vhost/global config instead.
+
+# ── Cache statique ────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType font/woff2 "access plus 1 month"
+</IfModule>
+
+# ── Compression ───────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# ── PHP ───────────────────────────────────────────
+# php_value/php_flag can cause Apache 500 depending on PHP mode.
+# Configure these values in php.ini, .user.ini, or hosting control panel.
+
+# ── Prevent directory listing ─────────────────────
+Options -Indexes
+
+# ── Disable server signature ──────────────────────
+ServerSignature Off
+
+# ── Error pages ───────────────────────────────────
+ErrorDocument 404 /index.php
+ErrorDocument 403 /index.php

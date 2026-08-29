@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" width="200" height="50">
+  <!-- Hexagon Icon -->
+  <g transform="translate(25,25)">
+    <!-- Outer hex -->
+    <polygon points="0,-18 15.6,-9 15.6,9 0,18 -15.6,9 -15.6,-9" fill="none" stroke="#FF5C00" stroke-width="2"/>
+    <!-- Corner nodes -->
+    <circle cx="0" cy="-18" r="2.5" fill="#FF5C00"/>
+    <circle cx="15.6" cy="-9" r="2.5" fill="#FF5C00"/>
+    <circle cx="15.6" cy="9" r="2.5" fill="#FF5C00"/>
+    <circle cx="0" cy="18" r="2.5" fill="#FF5C00"/>
+    <circle cx="-15.6" cy="9" r="2.5" fill="#FF5C00"/>
+    <circle cx="-15.6" cy="-9" r="2.5" fill="#FF5C00"/>
+    <!-- Circuit lines -->
+    <line x1="0" y1="-18" x2="0" y2="-6" stroke="#FF5C00" stroke-width="1.2"/>
+    <line x1="15.6" y1="-9" x2="6" y2="-3" stroke="#FF5C00" stroke-width="1.2"/>
+    <line x1="-15.6" y1="-9" x2="-6" y2="-3" stroke="#FF5C00" stroke-width="1.2"/>
+    <line x1="0" y1="18" x2="0" y2="6" stroke="#FF5C00" stroke-width="1.2"/>
+    <!-- Inner hex -->
+    <polygon points="0,-8 6.9,-4 6.9,4 0,8 -6.9,4 -6.9,-4" fill="#FF5C00" opacity="0.15"/>
+    <!-- Core -->
+    <circle cx="0" cy="0" r="4" fill="#FF5C00"/>
+  </g>
+  <!-- Text -->
+  <text x="52" y="22" font-family="Inter,sans-serif" font-weight="800" font-size="18" fill="#0A0A0A">INFO-SUP</text>
+  <text x="52" y="38" font-family="Inter,sans-serif" font-weight="500" font-size="11" fill="#6B7280" letter-spacing="3">DIGITAL</text>
+</svg>
